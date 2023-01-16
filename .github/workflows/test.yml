@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - dev
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - dev
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3
+      - run: pip install --upgrade pipx
+      - name: Create repository
+        run: |
+          pipx run cookiecutter --no-input ${{ github.workspace }}
+          git init /tmp/python_boilerplate
+        working-directory: /tmp
+      - name: Build new package
+        run: pipx run build /tmp/python_boilerplate
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: /tmp/python_boilerplate/dist/
