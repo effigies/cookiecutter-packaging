@@ -15,7 +15,7 @@ defaults:
     shell: bash
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: {% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
   cancel-in-progress: true
 
 permissions:
@@ -100,4 +100,4 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: {% raw %}${{ secrets.PYPI_API_TOKEN }}{% endraw %}
