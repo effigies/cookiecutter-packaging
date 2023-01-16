@@ -36,7 +36,7 @@ jobs:
       - name: Build new package
         run: pipx run build /tmp/python_boilerplate
       - name: Check packages
-        run: pipx run twine /tmp/python_boilerplate/dist/*
+        run: pipx run twine check /tmp/python_boilerplate/dist/*
       - name: Upload packages
         uses: actions/upload-artifact@v3
         with:
